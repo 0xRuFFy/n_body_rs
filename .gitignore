@@ -1,6 +1,11 @@
+# cargo init
 debug/
 target/
 Cargo.lock
 **/*.rs.bk
 *.pdb
 /target
+
+# editor / ide
+.vscode/
+.idea/
