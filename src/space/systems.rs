@@ -1,7 +1,7 @@
 use super::body::{Body, BodyBuilder};
 use super::space::Space;
 use bevy::prelude::*;
-use rand::Rng;
+use rand_distr::{Distribution, LogNormal};
 
 const START_SPEED: f32 = 10.0;
 const TEST_SYSTEM: [(Vec2, Vec2, f32); 9] = [
@@ -22,6 +22,7 @@ pub(super) fn setup(
     mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
     let mut rng = rand::thread_rng();
+    let normal = LogNormal::new(2.0, 1.0).unwrap();
     let mut space = Space::default();
     // for i in -10..=10 {
     //     for j in -10..=10 {
@@ -56,7 +57,7 @@ pub(super) fn setup(
         &mut materials,
         BodyBuilder::default()
             .position(Vec2::new(0.0, 0.0))
-            .mass(2000.0)
+            .mass(5000.0)
             .build(),
     );
     for i in 0..100 {
@@ -67,7 +68,8 @@ pub(super) fn setup(
             BodyBuilder::default()
                 .position(Vec2::new(1000.0, -1000.0 + i as f32 * 20.0))
                 .velocity(Vec2::new(-1.0 * START_SPEED, 0.0))
-                .mass(rng.gen_range(1.0..20.0))
+                // .mass(normal.sample(&mut rng))
+                .mass((normal.sample(&mut rng) as f32).abs() + 1.0)
                 .build(),
         );
     }
