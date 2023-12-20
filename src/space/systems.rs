@@ -24,19 +24,19 @@ pub(super) fn setup(
     let mut rng = rand::thread_rng();
     let normal = LogNormal::new(2.0, 1.0).unwrap();
     let mut space = Space::default();
-    // for i in -10..=10 {
-    //     for j in -10..=10 {
-    //         space.add_body(
-    //             &mut commands,
-    //             &mut meshes,
-    //             &mut materials,
-    //             BodyBuilder::default()
-    //                 .position(Vec2::new(i as f32 * 50.0, j as f32 * 50.0))
-    //                 .mass((i as f32 * j as f32).abs() + 1.0)
-    //                 .build(),
-    //         )
-    //     }
-    // }
+    for i in -15..=15 {
+        for j in -15..=15 {
+            space.add_body(
+                &mut commands,
+                &mut meshes,
+                &mut materials,
+                BodyBuilder::default()
+                    .position(Vec2::new(i as f32 * 50.0, j as f32 * 50.0))
+                    .mass((normal.sample(&mut rng) as f32).abs() + 1.0)
+                    .build(),
+            )
+        }
+    }
 
     // for (p, v, m) in TEST_SYSTEM {
     //     space.add_body(
@@ -51,28 +51,27 @@ pub(super) fn setup(
     //     )
     // }
 
-    space.add_body(
-        &mut commands,
-        &mut meshes,
-        &mut materials,
-        BodyBuilder::default()
-            .position(Vec2::new(0.0, 0.0))
-            .mass(5000.0)
-            .build(),
-    );
-    for i in 0..100 {
-        space.add_body(
-            &mut commands,
-            &mut meshes,
-            &mut materials,
-            BodyBuilder::default()
-                .position(Vec2::new(1000.0, -1000.0 + i as f32 * 20.0))
-                .velocity(Vec2::new(-1.0 * START_SPEED, 0.0))
-                // .mass(normal.sample(&mut rng))
-                .mass((normal.sample(&mut rng) as f32).abs() + 1.0)
-                .build(),
-        );
-    }
+    // space.add_body(
+    //     &mut commands,
+    //     &mut meshes,
+    //     &mut materials,
+    //     BodyBuilder::default()
+    //         .position(Vec2::new(0.0, 0.0))
+    //         .mass(5000.0)
+    //         .build(),
+    // );
+    // for i in 0..100 {
+    //     space.add_body(
+    //         &mut commands,
+    //         &mut meshes,
+    //         &mut materials,
+    //         BodyBuilder::default()
+    //             .position(Vec2::new(1000.0, -1000.0 + i as f32 * 20.0))
+    //             .velocity(Vec2::new(-1.0 * START_SPEED, 0.0))
+    //             .mass((normal.sample(&mut rng) as f32).abs() + 1.0)
+    //             .build(),
+    //     );
+    // }
 
     commands.insert_resource(space);
 }
