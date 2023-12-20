@@ -9,3 +9,6 @@ Cargo.lock
 # editor / ide
 .vscode/
 .idea/
+
+# ctags
+tags
