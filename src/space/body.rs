@@ -55,6 +55,12 @@ impl Body {
 
     pub fn fixed_update(&mut self, dt: f32) {
         self.velocity += self.acceleration * dt;
+        self.acceleration = Vec2::ZERO;
+    }
+
+    pub fn force_between(&self, other: &Body) -> Vec2 {
+        let __vec = other.position - self.position;
+        __vec.normalize_or_zero() * (self.mass * other.mass / __vec.length())
     }
 }
 
