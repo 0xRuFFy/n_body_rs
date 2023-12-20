@@ -8,6 +8,8 @@ pub(super) struct Body {
     position: Vec2,
     velocity: Vec2,
     acceleration: Vec2,
+
+    updated: bool,
 }
 
 impl Body {
@@ -33,6 +35,27 @@ impl Body {
             ))
             .id()
     }
+
+    pub fn position(&mut self) -> Option<Vec2> {
+        if self.updated {
+            self.updated = false;
+            return Some(self.position);
+        }
+        None
+    }
+
+    pub fn update(&mut self, dt: f32) {
+        self.position += self.velocity * dt;
+        self.updated = true;
+    }
+
+    pub fn apply_force(&mut self, force: Vec2) {
+        self.acceleration += force / self.mass;
+    }
+
+    pub fn fixed_update(&mut self, dt: f32) {
+        self.velocity += self.acceleration * dt;
+    }
 }
 
 pub(super) struct BodyBuilder {
@@ -41,6 +64,8 @@ pub(super) struct BodyBuilder {
     position: Vec2,
     velocity: Vec2,
     acceleration: Vec2,
+
+    updated: bool,
 }
 
 impl BodyBuilder {
@@ -72,6 +97,7 @@ impl BodyBuilder {
             position: self.position,
             velocity: self.velocity,
             acceleration: self.acceleration,
+            updated: false,
         }
     }
 }
@@ -84,6 +110,7 @@ impl Default for BodyBuilder {
             position: Vec2::ZERO,
             velocity: Vec2::ZERO,
             acceleration: Vec2::ZERO,
+            updated: false,
         }
     }
 }
